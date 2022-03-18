@@ -11,18 +11,23 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setAuth, setUserData } from './modules/AuthPage/ducks';
 import { doc, getDoc } from "firebase/firestore"; 
 import Topbar from './components/Topbar';
+import { Spin } from 'antd';
 
 function App() {
   const {auth, firestore} = window;
   const dispatch = useDispatch();
   const isAuth = useSelector(state => state.auth.isAuth)
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState();
+  const [isFetching, setIsFetching] = useState(true);
 
   onAuthStateChanged(auth, (user)=>{
       setUser(user);
   })
   
   useEffect(()=>{
+    if (!!user || user === null) {
+      setIsFetching(false);
+    }
     if (user) {
       getDoc(doc(firestore, 'users', user.uid))?.then(res => {
         dispatch(setUserData(res.data()))
@@ -38,6 +43,7 @@ function App() {
     <div className="App">
       {isAuth && <Topbar />}
       <div className="app-container">
+        {isFetching ? <Spin/> :
         <Switch>
           <Route exact path="/">
               <Redirect to={isAuth ? "/home" : "/auth"} />
@@ -50,7 +56,7 @@ function App() {
               {!isAuth && <Redirect to="/auth" />}
               test
           </Route>
-        </Switch>
+        </Switch>}
       </div>
     </div>
   );

@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Input, Button } from 'antd';
+import { Input, Button, notification } from 'antd';
 import { LoginOutlined } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
-import useForm from '../../../../utils/useForm';
+import { useForm, adminsUID, getErrorMessage } from '../../../../utils';
 import { doc, setDoc } from "firebase/firestore"; 
 
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
-import * as ducks from '../../ducks';
-import * as selectors from '../../selectors';
 import './styles.css';
 
 function UserInfoForm(props) {
@@ -30,20 +28,31 @@ function UserInfoForm(props) {
           uid: user.uid,
           name: data.student,
           group: data.group,
+          isAdmin: adminsUID?.includes(user.uid)
         }
         addUserInfo(payload);
       }).catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
         console.error(errorCode, '\n', errorMessage)
+        notification.error({
+          message: getErrorMessage(errorCode),
+          placement: 'bottomRight',
+          duration: 2,
+        })
       });
     } else {
-      signInWithEmailAndPassword(auth, email, password).then(()=>{
+      signInWithEmailAndPassword(auth, email, password).then((userCredential)=>{
         console.log('Auth success!');
       }).catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
         console.error(errorCode, '\n', errorMessage)
+        notification.error({
+          message: getErrorMessage(errorCode),
+          placement: 'bottomRight',
+          duration: 2,
+        })
       });
     }
   }

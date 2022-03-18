@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { collection, doc, setDoc } from "firebase/firestore"; 
 import { signOut } from 'firebase/auth';
-import { LogoutOutlined } from '@ant-design/icons';
+import { LogoutOutlined, ToolOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
 import './styles.css';
 
@@ -21,12 +21,8 @@ function Topbar(props) {
       <div className='app-topbar__right'>
         {user && <div className='app-topbar__user'>
           <div className='app-topbar__user-name'>
-            <span>ФИО:</span>
-            <span><b>{user?.name}</b></span>
-          </div>
-          <div className='app-topbar__user-group'>
-            <span>Группа:</span>
-            <span><b>{user?.group}</b></span>
+            {user.isAdmin && <ToolOutlined />}
+            <span>{user?.name} / {user?.group}</span>
           </div>
         </div>}
         <div className='app-topbar__logout'>
