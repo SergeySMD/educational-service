@@ -4,6 +4,7 @@ import { deepCopy } from './deepCopy';
 import { makeActionCreator } from './makeActionCreator';
 import FormModule from './useForm/Form';
 import useForm from './useForm';
+import { useConvertNumberSystems } from './generators'
 
 export {
   adminsUID,
@@ -11,5 +12,6 @@ export {
   deepCopy,
   makeActionCreator,
   FormModule,
-  useForm
+  useForm,
+  useConvertNumberSystems
 };

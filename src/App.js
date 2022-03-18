@@ -12,6 +12,7 @@ import { setAuth, setUserData } from './modules/AuthPage/ducks';
 import { doc, getDoc } from "firebase/firestore"; 
 import Topbar from './components/Topbar';
 import { Spin } from 'antd';
+import UserPage from './modules/UserPage';
 
 function App() {
   const {auth, firestore} = window;
@@ -54,7 +55,7 @@ function App() {
           </Route>
           <Route exact path="/home">
               {!isAuth && <Redirect to="/auth" />}
-              test
+              <UserPage/>
           </Route>
         </Switch>}
       </div>
